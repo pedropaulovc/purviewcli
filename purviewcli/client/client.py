@@ -41,9 +41,13 @@ Please configure the PURVIEW_NAME environment variable. Setting environment vari
     def http_get(self, app, method, endpoint, params, payload):
         uri = 'https://%s.%s.purview.azure.com%s' % (self.account_name, app, endpoint)
         headers = {"Authorization": "Bearer {0}".format(self.access_token)}
+        proxies = {
+            "http": "http://127.0.0.1:8888",
+            "https": "http://127.0.0.1:8888"
+        }
 
         try:
-            response = requests.request(method, uri, params=params, json=payload, headers=headers)
+            response = requests.request(method, uri, params=params, json=payload, headers=headers, proxies=proxies)
         except requests.exceptions.HTTPError as errh:
             print ("[HTTP ERROR]",errh)
         except requests.exceptions.ConnectionError as errc:
